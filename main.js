@@ -42,6 +42,9 @@ function calculateEligibility(inputMonth, inputYear) {
                     uAge -= 1
                     counter = 0
                 }
+             else if (uAge ==="undefined") {
+                 data[key}='An individual born in the month and year selected is not eligible for any division of play'
+                      }
             }
         }
     }
