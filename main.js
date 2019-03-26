@@ -35,7 +35,10 @@ function calculateEligibility(inputMonth, inputYear) {
             let year = j < 5 ? i : (i + 1)
             let key = '' + year + months[j]
 
-            if (uAge > 4) {
+                if (!uAge) {
+                    data[key] = 'An individual born in the month and year selected is not eligible for any division of play'
+                }
+                else if (uAge > 4) {
                 data[key] = 'U' + uAge
                 counter += 1
                 if (counter === 12) {
