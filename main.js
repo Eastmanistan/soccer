@@ -48,7 +48,8 @@ function calculateEligibility(inputMonth, inputYear) {
     console.log(data)
 
     console.log("eligibility: ", data[lookupKey]) 
-    if (!uAge) return "not eligible for any division of play"  
+    if (uAge< 4) return "not eligible for any division of play"  
+    else if (uAge> 19) return "not eligible for any division of play"  
     else return data[lookupKey]
     
 }
