@@ -1,55 +1,75 @@
 document.addEventListener('DOMContentLoaded', function (e) {
-    document.addEventListener('submit', function (e) {
-        e.preventDefault();
+    
+    // find all elements we want to auto update
+    var inputs = document.getElementsByClassName("autoUpdate");
+    
+    // for each of these elements
+    for (let i = 0; i < inputs.length; i++) {
+    
+        // add a event listener to update the text whenever the value changes
+        inputs[i].addEventListener("input", function() {
+            // grab the values we need
+            let birthMonth = document.querySelector('#month').value;
+            let birthYear = document.querySelector('#year').value;
 
-        let monthInput = document.querySelector('#month').value
-        let yearInput = document.querySelector('#year').value
-        let eligibility=calculateEligibility(monthInput,yearInput)
-        console.log('eligible',eligibility)
-        document.querySelector('#eligibility').innerHTML=eligibility
-    })
+            // if the birth year is a 4 digit number and the month is set
+            if (birthYear.match(/^[0-9]{4}$/) && birthMonth !== "") {
+
+                // set the inner HTML to the division value
+                document.getElementById("eligibility").innerHTML = getDivision(birthMonth, birthYear);
+            } else {
+                // else show nothing
+                document.getElementById("eligibility").innerHTML = ""
+            }
+        });    
+    }
 })
 
-function calculateEligibility(inputMonth, inputYear) {
-    let months = ['aug', 'sep', 'oct', 'nov', 'dec', 'jan', 'feb', 'mar', 'apr', 'may', 'jun',
-        'jul'
-    ]
-    // let inputMonth = 'jun'
-    // let inputYear = 2012
-    let lookupKey = '' + inputYear + inputMonth
-    let currentYear = new Date().getFullYear()
 
-    let minYear = currentYear - 19
-    let maxYear = minYear + 15
-    console.log(minYear, maxYear)
+/**
+ * returns the correct division for the child.  returns null if not eligible for any division
+ *
+ *  @param int birthMonth the integer equivilent of the month
+ *  @param int birthYear  the childs birth year
+ *
+ *  @return int  the division number or null
+ */
+function getDivision(birthMonth, birthYear) {
 
+    // if child was born August or later, bump them a division
+    var shiftedYear = birthMonth < 8 ? birthYear - 1 : birthYear; 
+    var currentYear = new Date().getFullYear();
 
-
-    let data = {}
-
-    let uAge = 19
-    let counter = 0
-    for (let i = minYear; i <= maxYear; i++) {
-        for (let j = 0; j < months.length; j++) {
-
-            let year = j < 5 ? i : (i + 1)
-            let key = '' + year + months[j]
-
-                if (uAge > 4) {
-                data[key] = 'U' + uAge
-                counter += 1
-                if (counter === 12) {
-                    uAge -= 1
-                    counter = 0
-                }
-            }
-        }
-    }
-    console.log(data)
-
-    console.log("eligibility: ", data[lookupKey]) 
-    if (uAge< 4) return "not eligible for any division of play"  
-    else if (uAge> 19) return "not eligible for any division of play"  
-    else return data[lookupKey]
+    // find the childs division
+    var division = currentYear - shiftedYear;
     
+    if (division > 19) {
+        return "Too old";
+    }
+    if (division < 5) {
+        return "Too young"
+    }
+    return "U" + division;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
